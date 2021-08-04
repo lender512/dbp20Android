@@ -22,4 +22,4 @@ En la entrega final desarrollamos por completo la aplicación que permite a las 
 
 ### Objetivos principales:
 - Tener un login y sign in que permita a los usuarios tener una cuenta personal.
-- - Dar al usuario la posibilidad de agregar direcciones a través de la aplicación movil.
+- Dar al usuario la posibilidad de agregar direcciones a través de la aplicación movil.
