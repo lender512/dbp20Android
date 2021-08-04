@@ -31,9 +31,6 @@ import java.util.Map;
 
 public class home extends AppCompatActivity implements View.OnClickListener {
 
-    private Spinner spinner;
-    private Button boton;
-
     //PostsList
     private Button mBtnAñadir;
     private ListView mListView;
@@ -49,50 +46,21 @@ public class home extends AppCompatActivity implements View.OnClickListener {
         mBtnAñadir.setOnClickListener(this);
         mListView = findViewById(R.id.listView);
         mEditText = findViewById(R.id.post);
-        //spinner = findViewById(R.id.spinner);
-        //boton = findViewById(R.id.buttonAgregar);
-        /*boton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                llenarSpinner();
-            }
-        });*/
 
         Button buttonRegApartment = (Button)findViewById(R.id.btnRegApartment);
         buttonRegApartment.setOnClickListener(this);
 
-        Button buttonRegPost = (Button)findViewById(R.id.btnRegPost);
-        buttonRegPost.setOnClickListener(this::onClick3);
+        /*Button buttonRegPost = (Button)findViewById(R.id.btnRegPost);
+        buttonRegPost.setOnClickListener(this::onClick2);*/
+
+        Button buttonRegPost2 = (Button)findViewById(R.id.btnRegPost);
+        buttonRegPost2.setOnClickListener(this::onClick3);
 
 
     }
 
-    /*private void llenarSpinner() {
-        ArrayList<Apartment> apartments = new ArrayList<>();
-        apartments.add(new Apartment("Lima","Calle A"));
-        apartments.add(new Apartment("Lince","Calle B"));
-        apartments.add(new Apartment("SJL","Calle C"));
-
-        ArrayAdapter<Apartment> adapter = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item, apartments);
-
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(home.this,"Seleccione",Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                Toast.makeText(home.this,"Seleccione",Toast.LENGTH_LONG).show();
-            }
-        });
-    }*/
-
-
-
-    public void onClick2(View view) {
+    //Mostrar Posts
+    /*public void onClick2(View view) {
         switch (view.getId()){
             case R.id.btnRegPost:
                 String texto = mEditText.getText().toString();
@@ -101,7 +69,7 @@ public class home extends AppCompatActivity implements View.OnClickListener {
                 mAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, mLista);
                 mListView.setAdapter(mAdapter);
         }
-    }
+    }*/
 
     public void showMessage(String message){
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -124,9 +92,9 @@ public class home extends AppCompatActivity implements View.OnClickListener {
         String distrito = District.getText().toString();
         String address = Address.getText().toString();
 
-        showMessage("Added");
+        showMessage("Añadido");
         if (address.length() == 0 || distrito.length() == 0) {
-            Toast.makeText(getApplicationContext(), "Something is wrong. Please check your inputs.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Revisa las entradas.", Toast.LENGTH_LONG).show();
             return;
         } else {
             Log.d(getApplication().getPackageName(), "Casa Creada");
@@ -142,15 +110,16 @@ public class home extends AppCompatActivity implements View.OnClickListener {
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            showMessage("Depa Creado");
+                            showMessage("Dirección Creada");
                             try {
+                                if(response.getBoolean("error")){
+                                    Toast.makeText(home.this,"Error",Toast.LENGTH_SHORT).show();}
                                 String District = response.getString("district");
                                 int id = response.getInt("id");
                                 String usu = District + Integer.toString(id);
                                 showMessage(usu);
                                 gotoHomeActivity(District, id);
                             } catch (JSONException e) {
-                                showMessage("ffff");
                                 e.printStackTrace();
                             }
                         }
@@ -174,19 +143,22 @@ public class home extends AppCompatActivity implements View.OnClickListener {
 
         EditText Comment = (EditText)findViewById(R.id.post);
         EditText Address = (EditText)findViewById(R.id.direc2);
+        EditText District = (EditText)findViewById(R.id.district);
 
         String comment = Comment.getText().toString();
         String address = Address.getText().toString();
+        String district = District.getText().toString();
 
         showMessage("Added");
-        if (comment.length() == 0) {
-            Toast.makeText(getApplicationContext(), "Something is wrong. Please check your inputs.", Toast.LENGTH_LONG).show();
+        if (comment.length() == 0 || district.length() == 0 || address.length() == 0) {
+            Toast.makeText(getApplicationContext(), "Revisa los datos.", Toast.LENGTH_LONG).show();
             return;
         } else {
             Log.d(getApplication().getPackageName(), "Post Creado");
             Map<String, String> message = new HashMap<>();
             message.put("comment", comment);
             message.put("address", address);
+            message.put("district", district);
             message.put("id", this.getIntent().getExtras().getString("id"));
             final JSONObject jsonMessage = new JSONObject(message);
             JsonObjectRequest stringRequest = new JsonObjectRequest(
@@ -204,7 +176,6 @@ public class home extends AppCompatActivity implements View.OnClickListener {
                                 showMessage(usu);
                                 gotoHomeActivity(Comment, id);
                             } catch (JSONException e) {
-                                showMessage("ffff");
                                 e.printStackTrace();
                             }
                         }

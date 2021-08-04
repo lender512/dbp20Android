@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         String Email = email.getText().toString();
         String Passsword = password.getText().toString();
-        showMessage("se logro");
+        showMessage("Conectando");
 
         Map<String, String> message = new HashMap<>();
         message.put("email", Email);
@@ -74,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        showMessage("welcome");
+                        showMessage("Bienvenido");
 
                         try {
                             if(response.getBoolean("error")){
-                                Toast.makeText(MainActivity.this,"error",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this,"Error",Toast.LENGTH_SHORT).show();
                             }
                             /*response.getString("email");
                             response.getString("password");

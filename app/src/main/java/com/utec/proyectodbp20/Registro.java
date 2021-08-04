@@ -64,11 +64,14 @@ public class Registro extends AppCompatActivity implements View.OnClickListener 
             String password = Password.getText().toString();
             String checkpassword = Checkpassword.getText().toString();
 
-            showMessage("llegue");
+
             if (!password.equals(checkpassword)){
                 showMessage("Las contraseñas deben ser iguales");
                 Log.d(getApplication().getPackageName(), "Las contraseñas deben ser iguales");
 
+            }if (fullname.length() == 0 || email.length() == 0 || password.length() == 0 || checkpassword.length() == 0) {
+                Toast.makeText(getApplicationContext(), "Debe rellenar todo correctamente.", Toast.LENGTH_LONG).show();
+                return;
             } else {
                 Log.d(getApplication().getPackageName(), "Usuario Creado");
                 Intent a=new Intent(Registro.this,MainActivity.class);
@@ -88,13 +91,14 @@ public class Registro extends AppCompatActivity implements View.OnClickListener 
                             public void onResponse(JSONObject response) {
                                 showMessage("Usuario Creado");
                                 try {
+                                    if(response.getBoolean("error")){
+                                        Toast.makeText(Registro.this,"Error",Toast.LENGTH_SHORT).show();}
                                     String Email = response.getString("email");
                                     int id = response.getInt("id");
                                     String usu = Email + Integer.toString(id);
                                     showMessage(usu);
                                     gotoHomeActivity(Email, id);
-                                } catch (JSONException e) {
-                                    showMessage("ffff");
+                                }catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
